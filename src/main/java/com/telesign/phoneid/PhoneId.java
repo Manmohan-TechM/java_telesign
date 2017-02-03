@@ -14,6 +14,7 @@ import com.telesign.phoneid.response.PhoneIdContactResponse;
 import com.telesign.phoneid.response.PhoneIdLiveResponse;
 import com.telesign.phoneid.response.PhoneIdScoreResponse;
 import com.telesign.phoneid.response.PhoneIdStandardResponse;
+import com.telesign.response.TeleSignResponse;
 import com.telesign.util.TeleSignRequest;
 import java.io.IOException;
 
@@ -37,7 +38,7 @@ public class PhoneId {
 	private static final String V1_PHONEID_CONTACT  = "/v1/phoneid/contact/";
 	private static final String V1_PHONEID_LIVE     = "/v1/phoneid/live/";
 	
-	
+	private TeleSignResponse tsResponse;
 	private final Gson gson = new Gson();
 
 	/**
@@ -144,10 +145,10 @@ public class PhoneId {
 	 *         object, which contains the JSON-formatted response body from the
 	 *         TeleSign server.
 	 */
-	public PhoneIdStandardResponse standard(String phone_number) {
+	/*public PhoneIdStandardResponse standard(String phone_number) {
 
 		return standard(phone_number, null, null);
-	}
+	}*/
 
 	/**
 	 * Returns risk information about a specified phone number, including a
@@ -162,10 +163,10 @@ public class PhoneId {
 	 *         object, which contains the JSON-formatted response body from the
 	 *         TeleSign server.
 	 */
-	public PhoneIdScoreResponse score(String phone_number, String ucid) {
+	/*public PhoneIdScoreResponse score(String phone_number, String ucid) {
 
 		return score(phone_number, ucid, null, null);
-	}
+	}*/
 
 	/**
 	 * Returns contact details for a specified phone number�s subscriber. This
@@ -181,10 +182,10 @@ public class PhoneId {
 	 *         object, which contains the JSON-formatted response body from the
 	 *         TeleSign server.
 	 */
-	public PhoneIdContactResponse contact(String phone_number, String ucid) {
+	/*public PhoneIdContactResponse contact(String phone_number, String ucid) {
 
 		return contact(phone_number, ucid, null, null);
-	}
+	}*/
 
 	/**
 	 * Returns information about a specified phone number�s
@@ -202,10 +203,10 @@ public class PhoneId {
 	 *         object, which contains the JSON-formatted response body from the
 	 *         TeleSign server.
 	 */
-	public PhoneIdLiveResponse live(String phone_number, String ucid) {
+	/*public PhoneIdLiveResponse live(String phone_number, String ucid) {
 
 		return live(phone_number, ucid, null, null);
-	}
+	}*/
 		
 	/**
 	 * Returns information about a specified phone number�s type, numbering
@@ -222,10 +223,10 @@ public class PhoneId {
 	 *         object, which contains the JSON-formatted response body from the
 	 *         TeleSign server.
 	 */
-	public PhoneIdStandardResponse standard(String phone_number, String originating_ip, String session_id) {
+	public TeleSignResponse standard(String phone_number, String originating_ip, String session_id) {
 
 		String result = null;
-
+		tsResponse = new TeleSignResponse();
 		try {
 
 			TeleSignRequest tr = new TeleSignRequest(API_BASE_URL, V1_PHONEID_STANDARD + phone_number, "GET", customer_id, secret_key, connectTimeout, readTimeout, httpsProtocol);
@@ -240,7 +241,8 @@ public class PhoneId {
 				tr.addParam("session_id", session_id);
 			}
 
-			result = tr.executeRequest();
+			//result = tr.executeRequest();
+			tsResponse = tr.executeRequest();
 		} catch (IOException e) {
 
 			System.err.println("IOException while executing phoneid standard API: "
@@ -248,10 +250,10 @@ public class PhoneId {
 			throw new RuntimeException(e);
 		}
 
-		PhoneIdStandardResponse response = gson.fromJson(result,
-				PhoneIdStandardResponse.class);
+		/*PhoneIdStandardResponse response = gson.fromJson(result,
+				PhoneIdStandardResponse.class);*/
 
-		return response;
+		return tsResponse;
 	}
 
 	/**
@@ -271,10 +273,10 @@ public class PhoneId {
 	 *         object, which contains the JSON-formatted response body from the
 	 *         TeleSign server.
 	 */
-	public PhoneIdScoreResponse score(String phone_number, String ucid, String originating_ip, String session_id) {
+	public TeleSignResponse score(String phone_number, String ucid, String originating_ip, String session_id) {
 
 		String result = null;
-
+		tsResponse = new TeleSignResponse();
 		try {
 
 			TeleSignRequest tr = new TeleSignRequest(API_BASE_URL, V1_PHONEID_SCORE + phone_number, "GET", customer_id, secret_key, connectTimeout, readTimeout, httpsProtocol);
@@ -290,7 +292,8 @@ public class PhoneId {
 				tr.addParam("session_id", session_id);
 			}
 
-			result = tr.executeRequest();
+			//result = tr.executeRequest();
+			tsResponse = tr.executeRequest();
 		} catch (IOException e) {
 
 			System.err.println("IOException while executing phoneid score API: "
@@ -298,10 +301,10 @@ public class PhoneId {
 			throw new RuntimeException(e);
 		}
 
-		PhoneIdScoreResponse response = gson.fromJson(result,
-				PhoneIdScoreResponse.class);
+		/*PhoneIdScoreResponse response = gson.fromJson(result,
+				PhoneIdScoreResponse.class);*/
 
-		return response;
+		return tsResponse;
 	}
 
 	/**
@@ -322,10 +325,10 @@ public class PhoneId {
 	 *         object, which contains the JSON-formatted response body from the
 	 *         TeleSign server.
 	 */
-	public PhoneIdContactResponse contact(String phone_number, String ucid, String originating_ip, String session_id) {
+	public TeleSignResponse contact(String phone_number, String ucid, String originating_ip, String session_id) {
 
 		String result = null;
-
+		tsResponse = new TeleSignResponse();
 		try {
 
 			TeleSignRequest tr = new TeleSignRequest(API_BASE_URL, V1_PHONEID_CONTACT + phone_number, "GET", customer_id, secret_key, connectTimeout, readTimeout, httpsProtocol);
@@ -341,7 +344,8 @@ public class PhoneId {
 				tr.addParam("session_id", session_id);
 			}
 
-			result = tr.executeRequest();
+			//result = tr.executeRequest();
+			tsResponse = tr.executeRequest();
 		} catch (IOException e) {
 
 			System.err.println("IOException while executing phoneid contact API: "
@@ -349,10 +353,10 @@ public class PhoneId {
 			throw new RuntimeException(e);
 		}
 
-		PhoneIdContactResponse response = gson.fromJson(result,
-				PhoneIdContactResponse.class);
+		/*PhoneIdContactResponse response = gson.fromJson(result,
+				PhoneIdContactResponse.class);*/
 
-		return response;
+		return tsResponse;
 	}
 
 	/**
@@ -377,10 +381,10 @@ public class PhoneId {
 	 *         object, which contains the JSON-formatted response body from the
 	 *         TeleSign server.
 	 */
-	public PhoneIdLiveResponse live(String phone_number, String ucid, String originating_ip, String session_id) {
+	public TeleSignResponse live(String phone_number, String ucid, String originating_ip, String session_id) {
 
 		String result = null;
-
+		tsResponse = new TeleSignResponse();
 		try {
 
 			TeleSignRequest tr = new TeleSignRequest(API_BASE_URL, V1_PHONEID_LIVE + phone_number, "GET", customer_id, secret_key, connectTimeout, readTimeout, httpsProtocol);
@@ -396,7 +400,8 @@ public class PhoneId {
 				tr.addParam("session_id", session_id);
 			}
 
-			result = tr.executeRequest();
+			//result = tr.executeRequest();
+			tsResponse = tr.executeRequest();
 		} catch (IOException e) {
 
 			System.err.println("IOException while executing phoneid live API: "
@@ -404,9 +409,9 @@ public class PhoneId {
 			throw new RuntimeException(e);
 		}
 
-		PhoneIdLiveResponse response = gson.fromJson(result,
-				PhoneIdLiveResponse.class);
+		/*PhoneIdLiveResponse response = gson.fromJson(result,
+				PhoneIdLiveResponse.class);*/
 
-		return response;
+		return tsResponse;
 	}
 }

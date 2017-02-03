@@ -10,6 +10,7 @@
 package com.telesign.verify;
 
 import com.google.gson.Gson;
+import com.telesign.response.TeleSignResponse;
 import com.telesign.util.IpValidator;
 import com.telesign.util.TeleSignRequest;
 import com.telesign.verify.response.VerifyResponse;
@@ -43,7 +44,7 @@ public class Verify {
 	private static final String V2_VERIFY_REGISTRATION = "/v2/verify/registration/";
 	
 	private final Gson gson = new Gson();
-	
+	private TeleSignResponse tsResponse;
 	/**
 	 * The Verify class constructor.
 	 * Once you instantiate a Verify object, you can use it to make instance calls to <em>Verify SMS</em> and <em>Verify Call</em>.
@@ -114,7 +115,7 @@ public class Verify {
 	 * @param phone_number	[Required] A string containing the user's phone number.
 	 * @return A {@link com.telesign.verify.response.VerifyResponse} object, which contains the JSON-formatted response body from the TeleSign server.
 	 */
-	public VerifyResponse sms(String phone_number) {
+	public TeleSignResponse sms(String phone_number) {
 
 		return sms(phone_number, null);
 	}
@@ -126,7 +127,7 @@ public class Verify {
 	 * @param language		[Optional]	A string containing the IETF language tag. For example, "fr-CA". Set this value to "null" to use English (the default). This value is used in applying predefined text message templates.
 	 * @return A {@link com.telesign.verify.response.VerifyResponse} object, which contains the JSON-formatted response body from the TeleSign server.
 	 */
-	public VerifyResponse sms(String phone_number, String language) {
+	public TeleSignResponse sms(String phone_number, String language) {
 
 		return sms(phone_number, language, null, null);
 	}
@@ -140,7 +141,7 @@ public class Verify {
 	 * @param template		[Optional]	A string containing a text message to override the predefined text message template. Your text message must incorporate a $$CODE$$ placeholder to integrate the verify_code field. Set this value to null (the default) to use the predefined template.
 	 * @return A {@link com.telesign.verify.response.VerifyResponse} object, which contains the JSON-formatted response body from the TeleSign server.
 	 */
-	public VerifyResponse sms(String phone_number, String language, String verify_code, String template) {
+	public TeleSignResponse sms(String phone_number, String language, String verify_code, String template) {
 		
 		return sms(phone_number, language, verify_code, template, null, null);
 	}
@@ -164,10 +165,10 @@ public class Verify {
 	 * @param session_id	[Optional] Your end users session id. Set it to "null" if not sending session id.
 	 * @return A {@link com.telesign.verify.response.VerifyResponse} object, which contains the JSON-formatted response body from the TeleSign server.
 	 */
-	public VerifyResponse sms(String phone_number, String language, String verify_code, String template, String originating_ip, String session_id) {
+	public TeleSignResponse sms(String phone_number, String language, String verify_code, String template, String originating_ip, String session_id) {
 
 		String result = null;
-
+		tsResponse = new TeleSignResponse();
 		try {
 
 			TeleSignRequest tr = new TeleSignRequest(API_BASE_URL, V1_VERIFY_SMS, "POST", customer_id, secret_key, connectTimeout, readTimeout, httpsProtocol);
@@ -201,7 +202,8 @@ public class Verify {
 			
 			tr.setPostBody(body);
 			
-			result = tr.executeRequest();
+			//result = tr.executeRequest();
+			tsResponse = tr.executeRequest();
 		}
 		catch (IOException e) {
 
@@ -209,9 +211,9 @@ public class Verify {
 			throw new RuntimeException(e);
 		}
 		
-		VerifyResponse response = gson.fromJson(result, VerifyResponse.class);
+		//VerifyResponse response = gson.fromJson(result, VerifyResponse.class);
 		
-		return response;
+		return tsResponse;
 	}
 	
 	/**
@@ -220,10 +222,10 @@ public class Verify {
 	 * @param phone_number	[Required]	A string containing the user�s phone number.
 	 * @return A {@link com.telesign.verify.response.VerifyResponse} object, which contains the JSON-formatted response body from the TeleSign server.
 	 */
-	public VerifyResponse call(String phone_number) {
+	/*public VerifyResponse call(String phone_number) {
 
 		return call(phone_number, null);
-	}
+	}*/
 	
 	/**
 	 * Delivers a verification code to the end user with a phone call. When the user answers their phone, the TeleSign server plays an automated voice message that contains the code.
@@ -232,20 +234,20 @@ public class Verify {
 	 * @param language		[Optional]	A string containing the IETF language tag. For example, "fr-CA". Set this value to "null" to use English (the default).
 	 * @return A {@link com.telesign.verify.response.VerifyResponse} object, which contains the JSON-formatted response body from the TeleSign server.
 	 */
-	public VerifyResponse call(String phone_number, String language) {
+	/*public VerifyResponse call(String phone_number, String language) {
 
 		return call(phone_number, language, null, null, 0, null, true, null, null, null, null);
-	}
+	}*/
 	/** 
 	 * @param phone_number	[Required] A string containing the user's phone number.
 	 * @param language		[Optional] A string containing the IETF language tag. For example, "fr-CA". Set this value to "null" to use English (the default).
 	 * @param ttsMessage 	[Optional] Allows you to pass a text-to-speech (TTS) message with language. Ex String: Hello, your secret code is $$CODE$$. Thank you.
 	 * @return	A {@link com.telesign.verify.response.VerifyResponse} object, which contains the JSON-formatted response body from the TeleSign server.
 	 */
-	public VerifyResponse call(String phone_number, String language, String ttsMessage) {
+	/*public VerifyResponse call(String phone_number, String language, String ttsMessage) {
 
 		return call(phone_number, language, null, null, 0, null, true, null, null, null, ttsMessage);
-	}
+	}*/
 		
 	/**
 	 * Delivers a verification code to the end user with a phone call. When the user answers their phone, the TeleSign server plays an automated voice message that contains the code.
@@ -258,10 +260,10 @@ public class Verify {
 	 * @param session_id	[Optional] Your end users session id. Set it to "null" if not sending session id.
 	 * @return A {@link com.telesign.verify.response.VerifyResponse} object, which contains the JSON-formatted response body from the TeleSign server.
 	 */
-	public VerifyResponse call(String phone_number, String language, String originating_ip, String session_id) {
+	/*public VerifyResponse call(String phone_number, String language, String originating_ip, String session_id) {
 
 		return call(phone_number, language, originating_ip, session_id, null);
-	}
+	}*/
 	
 	/**
 	 * Delivers a verification code to the end user with a phone call. When the user answers their phone, the TeleSign server plays an automated voice message that contains the code.
@@ -275,10 +277,10 @@ public class Verify {
 	 * @param call_forward_action 	[Optional]	A string containing call forward action
 	 * @return A {@link com.telesign.verify.response.VerifyResponse} object, which contains the JSON-formatted response body from the TeleSign server.
 	 */
-	public VerifyResponse call(String phone_number, String language, String originating_ip, String session_id, String call_forward_action) {
+	/*public VerifyResponse call(String phone_number, String language, String originating_ip, String session_id, String call_forward_action) {
 
 		return call(phone_number, language, null, null, 0, null, true, originating_ip, session_id, call_forward_action, null);
-	}
+	}*/
 	
 	/**
 	 * Delivers a verification code to the end user with a phone call. When the user answers their phone, the TeleSign server plays an automated voice message that contains the code.
@@ -293,10 +295,10 @@ public class Verify {
 	 * @param ttsMessage 	[Optional] Allows you to pass a text-to-speech (TTS) message with language. Ex String: Hello, your secret code is $$CODE$$. Thank you.
 	 * @return A {@link com.telesign.verify.response.VerifyResponse} object, which contains the JSON-formatted response body from the TeleSign server.
 	 */
-	public VerifyResponse call(String phone_number, String language, String originating_ip, String session_id, String call_forward_action, String ttsMessage) {
+	/*public VerifyResponse call(String phone_number, String language, String originating_ip, String session_id, String call_forward_action, String ttsMessage) {
 
 		return call(phone_number, language, null, null, 0, null, true, originating_ip, session_id, call_forward_action, ttsMessage);
-	}
+	}*/
 	/**
 	 * Delivers a verification code to the end user - with a phone call. When the user answers their phone, the TeleSign server plays an automated voice message that contains the code.
 	 * Use this overload when:
@@ -315,10 +317,10 @@ public class Verify {
 	 * @param redial				[Optional]	A boolean value that enables/disables redialing. Set this value to "true" (the default) when you want TeleSign to re-attempt the call after a failed attempt. Set this value to "false" when you don't.	
 	 * @return A {@link com.telesign.verify.response.VerifyResponse} object, which contains the JSON-formatted response body from the TeleSign server.
 	 */
-	public VerifyResponse call(String phone_number, String language, String verify_code, String verify_method, int extension_type, String extension_template, boolean redial) {
+	/*public VerifyResponse call(String phone_number, String language, String verify_code, String verify_method, int extension_type, String extension_template, boolean redial) {
 		
 		return call(phone_number , language, verify_code, verify_method, extension_type, extension_template, redial, null, null);
-	}
+	}*/
 	/**
 	 * Delivers a verification code to the end user - with a phone call. When the user answers their phone, the TeleSign server plays an automated voice message that contains the code.
 	 * Use this overload when:
@@ -341,9 +343,9 @@ public class Verify {
 	 * @param session_id			[Optional]  Your end users session id. Set it to "null" if not sending session id.	 
 	 * @return A {@link com.telesign.verify.response.VerifyResponse} object, which contains the JSON-formatted response body from the TeleSign server.
 	 */
-	public VerifyResponse call(String phone_number , String language, String verify_code, String verify_method, int extension_type, String extension_template, boolean redial, String originating_ip, String session_id) {
+	/*public VerifyResponse call(String phone_number , String language, String verify_code, String verify_method, int extension_type, String extension_template, boolean redial, String originating_ip, String session_id) {
 		return call(phone_number , language, verify_code, verify_method, extension_type, extension_template, redial, originating_ip, session_id, null, null);
-	}
+	}*/
 	
 	/**
 	 * Delivers a verification code to the end user - with a phone call. When the user answers their phone, the TeleSign server plays an automated voice message that contains the code.
@@ -369,11 +371,11 @@ public class Verify {
 	 * @param ttsMessage			[Optional]	text to speech feature of Telesign gets used, <a href="https://developer.telesign.com/v2.0/docs/rest_api-verify-call#text-to-speech-tts-hints">TTS hints</a>
 	 * @return A {@link com.telesign.verify.response.VerifyResponse} object, which contains the JSON-formatted response body from the TeleSign server.
 	 */
-	public VerifyResponse call(String phone_number , String language, String verify_code, String verify_method, int extension_type, String extension_template, boolean redial, 
+	public TeleSignResponse call(String phone_number , String language, String verify_code, String verify_method, int extension_type, String extension_template, boolean redial, 
 			String originating_ip, String session_id, String call_forward_action, String ttsMessage) {
 
 		String result = null;
-
+		tsResponse = new TeleSignResponse();
 		try {
 
 			TeleSignRequest tr = new TeleSignRequest(API_BASE_URL, V1_VERIFY_CALL, "POST", customer_id, secret_key, connectTimeout, readTimeout, httpsProtocol);
@@ -431,7 +433,8 @@ public class Verify {
 				body += "&tts_message=" + URLEncoder.encode(ttsMessage, "UTF-8");
 			
 			tr.setPostBody(body);
-			result = tr.executeRequest();
+			//result = tr.executeRequest();
+			tsResponse = tr.executeRequest();
 		}
 		catch (IOException e) {
 
@@ -439,9 +442,9 @@ public class Verify {
 			throw new RuntimeException(e);
 		}
 		
-		VerifyResponse response = gson.fromJson(result, VerifyResponse.class);
+		//VerifyResponse response = gson.fromJson(result, VerifyResponse.class);
 		
-		return response;
+		return tsResponse;
 	}
 	
 	/**
@@ -451,7 +454,7 @@ public class Verify {
 	 * @param resource_id	[Required]	The string returned in the Response Message that TeleSign sends upon receipt of your HTTP 1.1 Request Message - for either {@link com.telesign.verify#sms()} or {@link com.telesign.verify#call()}.
 	 * @return A {@link com.telesign.verify.response.VerifyResponse} object, which contains the JSON-formatted response body from the TeleSign server.
 	 */
-	public VerifyResponse status(String resource_id) {
+	public TeleSignResponse status(String resource_id) {
 
 		return status(resource_id, null);
 	}
@@ -464,7 +467,7 @@ public class Verify {
 	 * @param verify_code	[Required]	The verification code received from the user.
 	 * @return A {@link com.telesign.verify.response.VerifyResponse} object, which contains the JSON-formatted response body from the TeleSign server.
 	 */
-	public VerifyResponse status(String resource_id, String verify_code) {
+	public TeleSignResponse status(String resource_id, String verify_code) {
 		return status(resource_id, verify_code, null, null);
 	}
 
@@ -480,10 +483,10 @@ public class Verify {
 	 * @param session_id	[Optional] Your end users session id. Set it to "null" if not sending session id.
 	 * @return A {@link com.telesign.verify.response.VerifyResponse} object, which contains the JSON-formatted response body from the TeleSign server.
 	 */
-	public VerifyResponse status(String resource_id, String verify_code, String originating_ip, String session_id) {
+	public TeleSignResponse status(String resource_id, String verify_code, String originating_ip, String session_id) {
 
 		String result = null;
-		
+		tsResponse = new TeleSignResponse();
 		try {
 
 			TeleSignRequest tr = new TeleSignRequest(API_BASE_URL, V1_VERIFY + resource_id, "GET", customer_id, secret_key, connectTimeout, readTimeout, httpsProtocol);
@@ -501,7 +504,8 @@ public class Verify {
 				tr.addParam("session_id", session_id);
 			}
 
-			result = tr.executeRequest();
+			//result = tr.executeRequest();
+			tsResponse = tr.executeRequest();
 		}
 		catch (IOException e) {
 
@@ -509,9 +513,9 @@ public class Verify {
 			throw new RuntimeException(e);
 		}
 		
-		VerifyResponse response = gson.fromJson(result, VerifyResponse.class);
+		//VerifyResponse response = gson.fromJson(result, VerifyResponse.class);		
 		
-		return response;
+		return tsResponse;
 	}
 	
 	/**
@@ -525,19 +529,19 @@ public class Verify {
 	 * @param session_id	[Optional] Your end users session id. Set it to "null" if not sending session id.
 	 * @return A {@link com.telesign.verify.response.VerifyResponse} object, which contains the JSON-formatted response body from the TeleSign server.
 	 */
-	public VerifyResponse status(String resource_id, String originating_ip, String session_id) {
+	/*public VerifyResponse status(String resource_id, String originating_ip, String session_id) {
 
 		return status(resource_id, null, originating_ip, session_id);
-	}
+	}*/
 
 	/**
 	 * @param phone_number [Required] Your end user's phone number, including the country code.
 	 * @param bundle_id    [Required]
 	 * @return  A {@link com.telesign.verify.response.VerifyResponse} object, which contains the JSON-formatted response body from the TeleSign server.
 	 */
-	public VerifyResponse registration(String phone_number, String bundle_id){
+	/*public VerifyResponse registration(String phone_number, String bundle_id){
 		return registration(phone_number, bundle_id, null, null);
-	}
+	}*/
 
 	/**
 	 * @param phone_number 		   [Required] Your end user's phone number, including the country code.
@@ -548,9 +552,9 @@ public class Verify {
 	 * @param session_id	       [Optional] Your end users session id. Set it to "null" if not sending session id.
 	 * @return  A {@link com.telesign.verify.response.VerifyResponse} object, which contains the JSON-formatted response body from the TeleSign server.
 	 */
-	public VerifyResponse registration(String phone_number, String bundle_id, String originating_ip, String session_id){
+	public TeleSignResponse registration(String phone_number, String bundle_id, String originating_ip, String session_id){
 		String result = null;
-
+		tsResponse = new TeleSignResponse();
 		try {
 			TeleSignRequest tr = new TeleSignRequest(API_MOBILE_URL, V2_VERIFY_REGISTRATION + phone_number, "GET", customer_id, secret_key, connectTimeout, readTimeout, httpsProtocol);
 			
@@ -569,7 +573,8 @@ public class Verify {
 				tr.addParam("session_id", session_id);
 			}
 			
-			result = tr.executeRequest();
+			//result = tr.executeRequest();
+			tsResponse = tr.executeRequest();
 		}
 		catch (IOException e) {
 
@@ -577,9 +582,9 @@ public class Verify {
 			throw new RuntimeException(e);
 		}
 			
-		VerifyResponse response = gson.fromJson(result, VerifyResponse.class);
+		//VerifyResponse response = gson.fromJson(result, VerifyResponse.class);
 		
-		return response;
+		return tsResponse;
 	}
 	
 	/**
@@ -594,9 +599,9 @@ public class Verify {
 	 * @param smsMessage		 [Optional] Allows you to pass a message sent via sms . Ex String: Hello, your secret code is $$CODE$$. Thank you.
 	 * @return	A {@link com.telesign.verify.response.VerifyResponse} object, which contains the JSON-formatted response body from the TeleSign server.
 	 */
-	public VerifyResponse smartVerify(String phone_number, String ucid, String caller_id, String language, String verify_code, String preference, String ignore_risk, String ttsMessage, String pushMessage, String smsMessage){
+	/*public VerifyResponse smartVerify(String phone_number, String ucid, String caller_id, String language, String verify_code, String preference, String ignore_risk, String ttsMessage, String pushMessage, String smsMessage){
 		return smartVerify(phone_number, ucid, caller_id, language, verify_code, preference, ignore_risk, null, null, ttsMessage, pushMessage, smsMessage);
-	}
+	}*/
 	
 	/**
 	 * @param phone_number [Required] Your end user's phone number, including the country code.
@@ -607,9 +612,9 @@ public class Verify {
 	 * @param ignore_risk  [Optional] If set to "true", allows customers to bypass blocking the request if the score is above the threshold value configured in the customer account.
 	 * @return	A {@link com.telesign.verify.response.VerifyResponse} object, which contains the JSON-formatted response body from the TeleSign server.
 	 */
-	public VerifyResponse smartVerify(String phone_number, String ucid, String caller_id, String language, String verify_code, String preference, String ignore_risk){
+	/*public VerifyResponse smartVerify(String phone_number, String ucid, String caller_id, String language, String verify_code, String preference, String ignore_risk){
 		return smartVerify(phone_number, ucid, caller_id, language, verify_code, preference, ignore_risk, null, null, null, null, null);
-	}
+	}*/
 		
 	/**
 	 * @param phone_number [Required] Your end user's phone number, including the country code.
@@ -631,9 +636,9 @@ public class Verify {
 	 * @param smsMessage	[Optional] Allows you to pass a message sent via sms . Ex String: Hello, your secret code is $$CODE$$. Thank you.
 	 * @return	A {@link com.telesign.verify.response.VerifyResponse} object, which contains the JSON-formatted response body from the TeleSign server.
 	 */
-	public VerifyResponse smartVerify(String phone_number, String ucid, String caller_id, String language, String verify_code, String preference, String ignore_risk, String originating_ip, String session_id, String ttsMessage, String pushMessage, String smsMessage){
+	public TeleSignResponse smartVerify(String phone_number, String ucid, String caller_id, String language, String verify_code, String preference, String ignore_risk, String originating_ip, String session_id, String ttsMessage, String pushMessage, String smsMessage){
 		String result = null;
-
+		tsResponse = new TeleSignResponse();
 		try {
 
 			TeleSignRequest tr = new TeleSignRequest(API_BASE_URL, V1_VERIFY_SMART, "POST", customer_id, secret_key, connectTimeout, readTimeout, httpsProtocol);
@@ -688,7 +693,8 @@ public class Verify {
 			}
 
 			tr.setPostBody(body);			
-			result = tr.executeRequest();
+			//result = tr.executeRequest();
+			tsResponse = tr.executeRequest();
 		}
 		catch (IOException e) {
 
@@ -696,9 +702,9 @@ public class Verify {
 			throw new RuntimeException(e);
 		}	
 		
-		VerifyResponse response = gson.fromJson(result, VerifyResponse.class);
+		//VerifyResponse response = gson.fromJson(result, VerifyResponse.class);
 		
-		return response;
+		return tsResponse;
 	}
 	
 	/**
@@ -710,9 +716,9 @@ public class Verify {
 	 * 							  	  [Examples] template=mobile_2fa, or template=Outlook-2FA
 	 * @return A {@link com.telesign.verify.response.VerifyResponse} object, which contains the JSON-formatted response body from the TeleSign server.
 	 */
-	public VerifyResponse push(String phone_number, String bundle_id){
+	/*public VerifyResponse push(String phone_number, String bundle_id){
 		return push(phone_number, null, null, bundle_id, null, null, null);
-	}
+	}*/
 	
 	/**
 	 * @param phone_number 		 [Required] The phone number of the mobile device that you want to send push notifications to. 
@@ -737,10 +743,10 @@ public class Verify {
 	 * @param session_id		 [Optional] Your end users session id. Set it to "null" if not sending session id.
 	 * @return A {@link com.telesign.verify.response.VerifyResponse} object, which contains the JSON-formatted response body from the TeleSign server.
 	 */
-	public VerifyResponse push(String phone_number, String notification_type, String notification_value, String bundle_id, String message, 
+	public TeleSignResponse push(String phone_number, String notification_type, String notification_value, String bundle_id, String message, 
 			String originating_ip, String session_id){
 		String result = null;
-
+		tsResponse = new TeleSignResponse();
 		try {			
 			TeleSignRequest tr = new TeleSignRequest(API_MOBILE_URL, V2_VERIFY_PUSH, "POST", customer_id, secret_key, connectTimeout, readTimeout, httpsProtocol);
 			String body = "phone_number=" + URLEncoder.encode(phone_number, "UTF-8");			
@@ -776,7 +782,8 @@ public class Verify {
 			}
 			
 			tr.setPostBody(body);
-			result = tr.executeRequest();
+			//result = tr.executeRequest();
+			tsResponse = tr.executeRequest();
 		}
 		catch (IOException e) {
 
@@ -784,9 +791,9 @@ public class Verify {
 			throw new RuntimeException(e);
 		}		
 		
-		VerifyResponse response = gson.fromJson(result, VerifyResponse.class);
+		//VerifyResponse response = gson.fromJson(result, VerifyResponse.class);
 		
-		return response;
+		return tsResponse;
 	}
 	
 	/**
@@ -794,9 +801,9 @@ public class Verify {
 	 * @param verify_code  [Required] The verification code received from the end user.
 	 * @return A {@link com.telesign.verify.response.VerifyResponse} object, which contains the JSON-formatted response body from the TeleSign server.
 	 */
-	public VerifyResponse softToken(String phone_number, String soft_token_id, String verify_code, String bundle_id){
+	/*public VerifyResponse softToken(String phone_number, String soft_token_id, String verify_code, String bundle_id){
 		return softToken( phone_number, soft_token_id, verify_code, bundle_id, null, null);
-	}
+	}*/
 	
 	/**
 	 * @param phone_number   [Required] The phone number for the Verify Soft Token request, including country code. For example, phone_number=13105551212.
@@ -809,9 +816,9 @@ public class Verify {
 	 * @param session_id	 [Optional] Your end users session id. Set it to "null" if not sending session id.
 	 * @return A {@link com.telesign.verify.response.VerifyResponse} object, which contains the JSON-formatted response body from the TeleSign server.
 	 */
-	public VerifyResponse softToken(String phone_number, String soft_token_id, String verify_code, String bundle_id, String originating_ip, String session_id){
+	public TeleSignResponse softToken(String phone_number, String soft_token_id, String verify_code, String bundle_id, String originating_ip, String session_id){
 		String result = null;
-
+		tsResponse = new TeleSignResponse();
 		try {			
 			TeleSignRequest tr = new TeleSignRequest(API_MOBILE_URL, V2_VERIFY_TOKEN, "POST", customer_id, secret_key, connectTimeout, readTimeout, httpsProtocol);
 			String body = "phone_number=" + URLEncoder.encode(phone_number, "UTF-8");		
@@ -842,16 +849,17 @@ public class Verify {
 			}
 			
 			tr.setPostBody(body);
-			result = tr.executeRequest();
+			//result = tr.executeRequest();
+			tsResponse = tr.executeRequest();
 		}
 		catch (IOException e) {
 			System.err.println("IOException while executing Verify soft token API: " + e.getMessage());
 			throw new RuntimeException(e);
 			}
 		
-		VerifyResponse response = gson.fromJson(result, VerifyResponse.class);
+		//VerifyResponse response = gson.fromJson(result, VerifyResponse.class);
 		
-		return response;
+		return tsResponse;
 		}
 	/**
 	 * Matches the notification_value for a string having 6-8 digits 
