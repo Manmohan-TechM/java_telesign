@@ -24,6 +24,7 @@ import java.security.SignatureException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -34,6 +35,9 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 
 import org.apache.commons.codec.binary.Base64;
+
+import com.telesign.response.Response;
+import com.telesign.response.TeleSignResponse;
 
 /** The TeleSignRequest class is an abstraction for creating and sending HTTP 1.1 REST Requests for TeleSign web services. */
 public class TeleSignRequest {
@@ -369,7 +373,7 @@ public class TeleSignRequest {
 	 *			 A {@link java.security.SignatureException} signals that an
 	 *			 error occurred while attempting to sign the Request.
 	 */
-	public String executeRequest() throws IOException {
+	public TeleSignResponse executeRequest() throws IOException {
 		setSigningMethod(auth);
 		String signingString = getSigningString(customer_id);
 		String signature;
@@ -441,8 +445,11 @@ public class TeleSignRequest {
 			wr.flush();
 			wr.close();
 		}
-
 		int response = connection.getResponseCode();
+		// Newly created Telesign Response for v2.0.0
+		TeleSignResponse tsRes = new TeleSignResponse();
+		tsRes.setStatusCode(connection.getResponseCode());
+		tsRes.setStatusLine(connection.getResponseMessage());
 
 		BufferedReader in;
 
@@ -456,15 +463,19 @@ public class TeleSignRequest {
 
 				url_output += urlReturn;
 			}
-
+			
+			tsRes.setBody(url_output);
+			for(Map.Entry<String, List<String>> header :connection.getHeaderFields().entrySet())
+				tsRes.addHeader(header.getKey(), header.getValue());
 			in.close();
 		}
 		catch (IOException e) {
 			System.err.println("IOException while reading from input stream " + e.getMessage());
 			throw new RuntimeException(e);
 		}
-
-		return url_output;
+		//System.out.println(tsRes.toString());
+		//return url_output;
+		return tsRes;
 	}
 
 	/**
