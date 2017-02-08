@@ -257,6 +257,28 @@ public class TeleSignRequest {
 		headers = new TreeMap<String, String>();
 		params = new HashMap<String, String>();
 	}
+	
+	public TeleSignRequest(String base, String resource, String method, String customer_id, String secret_key, Map<String, String> requestParams) {
+
+		this.base = base;
+		this.resource = resource;
+		this.customer_id = customer_id;
+		this.secret_key = secret_key;
+		try{
+			this.connectTimeout = Integer.parseInt(requestParams.get("connectTimeout"));
+			this.readTimeout = Integer.parseInt(requestParams.get("readTimeout"));			
+		} catch(NumberFormatException nfe){
+			System.err.println("IOException while executing phoneid live API: "
+					+ nfe.getMessage());			
+		}
+		this.httpsProtocol = requestParams.get("httpsProtocol");
+
+		post = (method.toLowerCase().equals("post"));
+
+		ts_headers = new TreeMap<String, String>();
+		headers = new TreeMap<String, String>();
+		params = new HashMap<String, String>();
+	}
 
 	/**
 	 * Adds an HTTP 1.1 request header field/value pair to the set of request
