@@ -120,7 +120,7 @@ public class TeleBureauClient {
 		tsResponse = new TeleSignResponse();
 		try {
 			TeleSignRequest tr = new TeleSignRequest(API_BASE_URL,
-					TELEBUREAU_EVENT + reference_id, "GET", customerId,
+					TELEBUREAU_EVENT + reference_id, "DELETE", customerId,
 					secretKey, telebureauParams);
 			TeleSignUtils.parseGetParams(tr, deleteParams);
 
