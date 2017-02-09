@@ -107,7 +107,7 @@ public class TeleBureauClient {
 	 * Deletes a previously submitted fraud event. You make this call in your
 	 * web application after completion of the create transaction for a
 	 * telebureau event. See
-	 * https://developer.telesign.com/docs/rest_api-telebureau for detailed API
+	 * <a href="https://developer.telesign.com/docs/rest_api-telebureau"> for detailed API</a>
 	 * documentation.
 	 * 
 	 * @param reference_id
