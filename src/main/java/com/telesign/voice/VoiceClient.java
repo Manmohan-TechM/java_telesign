@@ -68,7 +68,9 @@ public class VoiceClient {
 	 * Retrieves the current status of the voice call. See <a
 	 * href="https://developer.telesign.com/docs/voice-api"> for detailed API
 	 * documentation</a>.
-	 * 
+	 * 	 
+	 * @param reference_id
+	 * @param statusParams
 	 * @return
 	 */
 	public TeleSignResponse status(String reference_id,

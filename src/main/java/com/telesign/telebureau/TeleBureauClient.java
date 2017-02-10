@@ -16,19 +16,7 @@ import com.telesign.util.TeleSignUtils;
  */
 public class TeleBureauClient {
 	private String customerId;
-	private String secretKey;
-	/*
-	 * private int connectTimeout; private int readTimeout; private String
-	 * httpsProtocol; private String ciphers; private String url; // Not used
-	 * yet private Map<String, String> extra; private String sessionId,
-	 * originatingIp; private String ucid;
-	 * 
-	 * private String fraud_type, occurred_at; private String verified_by =
-	 * "None"; private String verified_at = "None"; private String discovered_at
-	 * = "None"; private String fraud_ip = "None"; private String impact_type =
-	 * "None"; private String impact = "None"; private boolean addToBlocklist;
-	 * private String blocklistStartDate; private String blocklistEndDate;
-	 */
+	private String secretKey;	
 	private Map<String, String> telebureauParams;
 	private static final String API_BASE_URL = "https://rest.telesign.com";
 	private static final String TELEBUREAU_EVENT = "/v1/telebureau/event/";
@@ -46,8 +34,11 @@ public class TeleBureauClient {
 	 * Creates a telebureau event corresponding to supplied data. See
 	 * https://developer.telesign.com/docs/rest_api-telebureau for detailed API
 	 * documentation.
-	 * 
+	 *	
 	 * @param phone_number
+	 * @param fraud_type
+	 * @param occurred_at
+	 * @param createEventParams
 	 * @return
 	 */
 	public TeleSignResponse create(String phone_number, String fraud_type,
@@ -81,7 +72,9 @@ public class TeleBureauClient {
 	 * application after completion of create transaction for a telebureau
 	 * event. See https://developer.telesign.com/docs/rest_api-telebureau for
 	 * detailed API documentation.
-	 * 
+	 *	
+	 * @param reference_id
+	 * @param retrieveParams
 	 * @return
 	 */
 	public TeleSignResponse retrieve(String reference_id,
