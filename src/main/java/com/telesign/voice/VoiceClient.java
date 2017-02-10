@@ -47,10 +47,10 @@ public class VoiceClient {
 		try {
 			TeleSignRequest tr = new TeleSignRequest(API_BASE_URL,
 					VOICE_RESOURCE, "POST", customer_id, secret_key, params);
+			callParams.put("phone_number", phone_number);
 			callParams.put("message", message);
 			callParams.put("message_type", message_type);
-			StringBuffer body = TeleSignUtils.parsePostParams(phone_number,
-					callParams);
+			StringBuffer body = TeleSignUtils.parsePostParams(callParams);
 
 			tr.setPostBody(body.toString());
 

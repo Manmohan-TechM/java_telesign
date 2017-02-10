@@ -49,10 +49,10 @@ public class TeleBureauClient {
 			TeleSignRequest tr = new TeleSignRequest(API_BASE_URL,
 					TELEBUREAU_EVENT, "POST", customerId, secretKey,
 					telebureauParams);
+			createEventParams.put("phone_number", phone_number);
 			createEventParams.put("fraud_type", fraud_type);
 			createEventParams.put("occurred_at", occurred_at);
-			StringBuffer body = TeleSignUtils.parsePostParams(phone_number,
-					createEventParams);
+			StringBuffer body = TeleSignUtils.parsePostParams(createEventParams);
 
 			tr.setPostBody(body.toString());
 

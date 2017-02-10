@@ -112,8 +112,8 @@ public class Verify {
 			TeleSignRequest tr = new TeleSignRequest(API_BASE_URL,
 					V1_VERIFY_SMS, "POST", customer_id, secret_key,
 					verifyParams);
-			StringBuffer body = TeleSignUtils.parsePostParams(phone_number,
-					smsParams);
+			smsParams.put("phone_number", phone_number);
+			StringBuffer body = TeleSignUtils.parsePostParams(smsParams);
 
 			tr.setPostBody(body.toString());
 
@@ -204,8 +204,8 @@ public class Verify {
 			TeleSignRequest tr = new TeleSignRequest(API_BASE_URL,
 					V1_VERIFY_CALL, "POST", customer_id, secret_key,
 					verifyParams);
-			StringBuffer body = TeleSignUtils.parsePostParams(phone_number,
-					callParams);
+			callParams.put("phone_number", phone_number);
+			StringBuffer body = TeleSignUtils.parsePostParams(callParams);
 
 			tr.setPostBody(body.toString());
 
@@ -379,8 +379,8 @@ public class Verify {
 			TeleSignRequest tr = new TeleSignRequest(API_BASE_URL,
 					V1_VERIFY_SMART, "POST", customer_id, secret_key,
 					verifyParams);
-			StringBuffer body = TeleSignUtils.parsePostParams(phone_number,
-					smartVerifyParams);
+			smartVerifyParams.put("phone_number", phone_number);
+			StringBuffer body = TeleSignUtils.parsePostParams(smartVerifyParams);
 
 			tr.setPostBody(body.toString());
 
@@ -436,9 +436,8 @@ public class Verify {
 			TeleSignRequest tr = new TeleSignRequest(API_MOBILE_URL,
 					V2_VERIFY_PUSH, "POST", customer_id, secret_key,
 					verifyParams);
-
-			StringBuffer body = TeleSignUtils.parsePostParams(phone_number,
-					pushParams);
+			pushParams.put("phone_number", phone_number);
+			StringBuffer body = TeleSignUtils.parsePostParams(pushParams);
 
 			tr.setPostBody(body.toString());
 
@@ -483,8 +482,8 @@ public class Verify {
 			TeleSignRequest tr = new TeleSignRequest(API_MOBILE_URL,
 					V2_VERIFY_TOKEN, "POST", customer_id, secret_key,
 					verifyParams);
-			StringBuffer body = TeleSignUtils.parsePostParams(phone_number,
-					softTokenParams);
+			softTokenParams.put("phone_number", phone_number);
+			StringBuffer body = TeleSignUtils.parsePostParams(softTokenParams);
 			tr.setPostBody(body.toString());
 
 			tsResponse = tr.executeRequest();

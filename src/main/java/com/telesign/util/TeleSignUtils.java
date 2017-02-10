@@ -11,17 +11,18 @@ import java.util.Map;
 public class TeleSignUtils {
 	
 	/**
-	 * @param phone_number
 	 * @param postParams
 	 * @return
 	 * @throws UnsupportedEncodingException
 	 */
-	public static StringBuffer parsePostParams(String phone_number, Map<String, String> postParams)
+	public static StringBuffer parsePostParams(Map<String, String> postParams)
 			throws UnsupportedEncodingException {
 		StringBuffer body = new StringBuffer();
-		body.append("phone_number=").append(
-				URLEncoder.encode(phone_number, "UTF-8"));
+		
 		for (Map.Entry<String, String> param : postParams.entrySet()) {
+			if(body.length() == 0)
+				body.append(param.getKey()).append("=").append(URLEncoder.encode(param.getValue(), "UTF-8"));
+			else
 			body.append("&").append(param.getKey()).append("=")
 					.append(URLEncoder.encode(param.getValue(), "UTF-8"));
 		}

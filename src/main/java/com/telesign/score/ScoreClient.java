@@ -40,8 +40,10 @@ public class ScoreClient {
 		try {
 			TeleSignRequest tr = new TeleSignRequest(API_BASE_URL,
 					SCORE_RESOURCE, "POST", customer_id, secret_key, params);
+			
+			scoreParams.put("phone_number", phone_number);
 			scoreParams.put("account_lifecycle_event", account_lifecycle_event);
-			StringBuffer body = TeleSignUtils.parsePostParams(phone_number, scoreParams);
+			StringBuffer body = TeleSignUtils.parsePostParams(scoreParams);
 
 			tr.setPostBody(body.toString());
 
