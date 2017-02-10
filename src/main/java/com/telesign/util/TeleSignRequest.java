@@ -331,7 +331,7 @@ public class TeleSignRequest {
 			connection.setRequestMethod("DELETE");
 		}
 		int response = connection.getResponseCode();
-		// Newly created Telesign Response for v2.0.0
+		
 		TeleSignResponse tsRes = new TeleSignResponse();
 		tsRes.setStatusCode(response);
 		tsRes.setStatusLine(connection.getResponseMessage());
@@ -358,8 +358,7 @@ public class TeleSignRequest {
 			System.err.println("IOException while reading from input stream " + e.getMessage());
 			throw new RuntimeException(e);
 		}
-		//System.out.println(tsRes.toString());
-		//return url_output;
+
 		return tsRes;
 	}
 
