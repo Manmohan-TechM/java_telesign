@@ -46,10 +46,10 @@ public class MessagingClient {
 		try {
 			TeleSignRequest tr = new TeleSignRequest(API_BASE_URL,
 					MESSAGING_RESOURCE, "POST", customer_id, secret_key, params);
+			messageParams.put("phone_number", phone_number);
 			messageParams.put("message", message);
 			messageParams.put("message_type", message_type);
-			StringBuffer body = TeleSignUtils.parsePostParams(phone_number,
-					messageParams);
+			StringBuffer body = TeleSignUtils.parsePostParams(messageParams);
 
 			tr.setPostBody(body.toString());
 
