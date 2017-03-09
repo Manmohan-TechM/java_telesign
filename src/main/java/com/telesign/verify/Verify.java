@@ -17,9 +17,9 @@ import com.telesign.util.TeleSignRequest;
 import com.telesign.util.TeleSignUtils;
 
 /**
- * The Verify class abstracts your interactions with the
- * <em>TeleSign Verify web service</em>. A Verify object encapsulates your
- * credentials (your TeleSign <em>Customer ID</em> and <em>Secret Key</em>).
+ * The Verify API delivers phone-based verification and two-factor
+ * authentication using a time-based, one-time passcode sent via SMS message,
+ * Voice call or Push Notification. 
  */
 public class Verify {
 
@@ -53,7 +53,7 @@ public class Verify {
 	 *            [Required] A string containing your TeleSign Secret Key (a
 	 *            bese64-encoded string valu, available from the TeleSign Client
 	 *            Portal).
-	 */	
+	 */
 	public Verify(String customer_id, String secret_key,
 			Map<String, String> params) {
 		this.customer_id = customer_id;
@@ -62,46 +62,10 @@ public class Verify {
 	}
 
 	/**
-	 * Delivers a verification code to the end user by sending it in a text
-	 * message. Use this overload when:
-	 * <ul>
-	 * <li>the end user's native written language is not the default language
-	 * (English), or</li>
-	 * <li>when you want to send the user a verification code that you create,
-	 * or</li>
-	 * <li>when you want to apply a custom text message template.</li>
-	 * </ul>
-	 * 
-	 * @param phone_number
-	 *            [Required] A string containing the user�s phone number.
-	 * @param language
-	 *            [Optional] A string containing the IETF language tag. For
-	 *            example, "fr-CA". Set this value to "null" to use English (the
-	 *            default). This value is used in applying predefined text
-	 *            message templates.
-	 * @param verify_code
-	 *            [Optional] A string containing the verification code that you
-	 *            want to send to the end user. When you set this value to
-	 *            "null", TeleSign automatically generates the verification code
-	 *            (the default behavior).
-	 * @param template
-	 *            [Optional] A string containing a text message to override the
-	 *            predefined text message template. Your text message must
-	 *            incorporate a $$CODE$$ placeholder to integrate the
-	 *            verify_code field. Set this value to null (the default) to use
-	 *            the predefined template.
-	 * @param originating_ip
-	 *            [Optional] Your end users IP Address. This value must be in
-	 *            the format defined by IETF in the Internet-Draft document
-	 *            titled Textual Representation of IPv4 and IPv6 Addresses. Ex:
-	 *            originating_ip=192.168.123.456. Set it to null if not sending
-	 *            originating ip.
-	 * @param session_id
-	 *            [Optional] Your end users session id. Set it to "null" if not
-	 *            sending session id.
-	 * @return A {@link com.telesign.verify.response.VerifyResponse} object,
-	 *         which contains the JSON-formatted response body from the TeleSign
-	 *         server.
+	 * The SMS Verify API delivers phone-based verification and two-factor
+	 * authentication using a time-based, one-time passcode sent over SMS. See
+	 * https://developer.telesign.com/docs/rest_api-verify-sms for detailed API
+	 * documentation.
 	 */
 	public TeleSignResponse sms(String phone_number,
 			Map<String, String> smsParams) {
@@ -129,74 +93,12 @@ public class Verify {
 	}
 
 	/**
-	 * Delivers a verification code to the end user - with a phone call. When
-	 * the user answers their phone, the TeleSign server plays an automated
-	 * voice message that contains the code. Use this overload when:
-	 * <ul>
-	 * <li>the end user's spoken language is not the default language (English),
-	 * or</li>
-	 * <li>when you want to send them a verification code that you create, or</li>
-	 * <li>when you need to specify a method for handling automated interactions
-	 * with a PBX.</li>
-	 * </ul>
-	 * 
-	 * @param phone_number
-	 *            [Required] A string containing the user�s phone number.
-	 * @param language
-	 *            [Optional] A string containing the IETF language tag. For
-	 *            example, "fr-CA". Set this value to "null" to use English (the
-	 *            default).
-	 * @param verify_code
-	 *            [Optional] A string containing the verification code that you
-	 *            want to send to the end user. When you set this value to
-	 *            "null", TeleSign automatically generates the verification code
-	 *            (the default behavior).
-	 * @param verify_method
-	 *            [Optional] A string containing the input method you want the
-	 *            end user to use when returning the verification code. Use a
-	 *            value of "keypress" when you want the user to use their phone
-	 *            to dial the code. Set this value to null when you want the
-	 *            user to enter the code into your web aplication (the default).
-	 * @param extension_type
-	 *            [Optional] An Integer value representing the type of response
-	 *            to use when dialing into a Private Branch Exchange (PBX). Use
-	 *            a value of 1 to have TeleSign use Dual-Tone Multi-Frequency
-	 *            (DTMF) tones to dail the user's extension. Use a value of 2 to
-	 *            have TeleSign use voice automation to request the user's
-	 *            extension. Use a value of 0 (the default) when the user isn't
-	 *            behind a PBX.
-	 * @param extension_template
-	 *            [Optional] A numerical string specifying the user's PBX
-	 *            extension number. Since this value is used in the call string,
-	 *            you can include one second pauses by adding commas before the
-	 *            extension number. Set this value to null (the default) if not
-	 *            used.
-	 * @param redial
-	 *            [Optional] A boolean value that enables/disables redialing.
-	 *            Set this value to "true" (the default) when you want TeleSign
-	 *            to re-attempt the call after a failed attempt. Set this value
-	 *            to "false" when you don't.
-	 * @param originating_ip
-	 *            [Optional] Your end users IP Address. This value must be in
-	 *            the format defined by IETF in the Internet-Draft document
-	 *            titled Textual Representation of IPv4 and IPv6 Addresses. Ex:
-	 *            originating_ip=192.168.123.456. Set it to null if not sending
-	 *            originating ip.
-	 * @param session_id
-	 *            [Optional] Your end users session id. Set it to "null" if not
-	 *            sending session id.
-	 * @param call_forward_action
-	 *            [Optional] A string containing call forward action
-	 * @param ttsMessage
-	 *            [Optional] text to speech feature of Telesign gets used, <a
-	 *            href=
-	 *            "https://developer.telesign.com/v2.0/docs/rest_api-verify-call#text-to-speech-tts-hints"
-	 *            >TTS hints</a>
-	 * @return A {@link com.telesign.verify.response.VerifyResponse} object,
-	 *         which contains the JSON-formatted response body from the TeleSign
-	 *         server.
+	 * The Voice Verify API delivers patented phone-based verification and
+	 * two-factor authentication using a one-time passcode sent over voice
+	 * message. See https://developer.telesign.com/docs/rest_api-verify-call for
+	 * detailed API documentation.
 	 */
-	public TeleSignResponse call(String phone_number,
+	public TeleSignResponse voice(String phone_number,
 			Map<String, String> callParams) {
 
 		tsResponse = new TeleSignResponse();
@@ -221,31 +123,9 @@ public class Verify {
 	}
 
 	/**
-	 * Requests the verification result from TeleSign. After sending an end user
-	 * a verification code, wait a minute or two to allow them to receive it and
-	 * then respond, and then call this method to find out if the end user
-	 * passed the code challenge. This method takes only one parameter�the ID of
-	 * this particular web service transaction.
-	 * 
-	 * @param resource_id
-	 *            [Required] The string returned in the Response Message that
-	 *            TeleSign sends upon receipt of your HTTP 1.1 Request Message -
-	 *            for either {@link com.telesign.verify#sms()} or
-	 *            {@link com.telesign.verify#call()}.
-	 * @param verify_code
-	 *            [Required] The verification code received from the user.
-	 * @param originating_ip
-	 *            [Optional] Your end users IP Address. This value must be in
-	 *            the format defined by IETF in the Internet-Draft document
-	 *            titled Textual Representation of IPv4 and IPv6 Addresses. Ex:
-	 *            originating_ip=192.168.123.456. Set it to null if not sending
-	 *            originating ip.
-	 * @param session_id
-	 *            [Optional] Your end users session id. Set it to "null" if not
-	 *            sending session id.
-	 * @return A {@link com.telesign.verify.response.VerifyResponse} object,
-	 *         which contains the JSON-formatted response body from the TeleSign
-	 *         server.
+	 * Retrieves the verification result for any verify resource. See
+	 * https://developer.telesign.com/docs/rest_api-verify-transaction-callback
+	 * for detailed API documentation.
 	 */
 	public TeleSignResponse status(String resource_id,
 			Map<String, String> statusParams) {
@@ -309,69 +189,14 @@ public class Verify {
 	}
 
 	/**
-	 * @param phone_number
-	 *            [Required] Your end user's phone number, including the country
-	 *            code.
-	 * @param ucid
-	 *            [Required] A string the specifies one of the <a href=
-	 *            "http://docs.telesign.com/rest/content/xt/xt-use-case-codes.html#xref-use-case-codes"
-	 *            >Use Case Codes</a>.
-	 * @param caller_id
-	 *            [Optional] End user's caller ID if available. Used for Verify
-	 *            SMS and Verify Call transactions, but is ignored for Verify
-	 *            Push transactions.
-	 * @param language
-	 *            [Optional] Determines the message for Verify SMS and Verify
-	 *            Push. IETF language tag is used in mapping languages codes to
-	 *            predefined templates. For Verify Voice, the language
-	 *            determines the set of audio files to play for the call.
-	 *            </br>For a complete list of language tags, see <a href=
-	 *            "http://docs.telesign.com/rest/content/xt/xt-language-tags.html#xref-language-tags"
-	 *            >Supported Languages</a>.
-	 * @param verify_code
-	 *            [Optional] The verification code used for the code challenge.
-	 *            By default, TeleSign automatically generates a six-digit value
-	 *            for you. </br>If you prefer to use your own verification code,
-	 *            you can override the default behavior by including this
-	 *            parameter and giving it an all-digit string value (0-9 in
-	 *            Latin-1), with the length as specified by your selected
-	 *            TeleSign settings. </br>Leading zeros are recognized, and
-	 *            therefore should be used accordingly.
-	 * @param preference
-	 *            [Optional] Allows customers to override the Smart Verify
-	 *            method selection. Customers can specify either "call", "sms"
-	 *            or "push" to be the recommended method to attempt. </br>Since
-	 *            not all methods are supported on all devices, TeleSign may
-	 *            ignore the selected override method, in order to provide the
-	 *            method that is most appropriate, in which case Telesign
-	 *            selects the method in the order of "push", "sms", and "call".
-	 * @param ignore_risk
-	 *            [Optional] If set to "true", allows customers to bypass
-	 *            blocking the request if the score is above the threshold value
-	 *            configured in the customer account.
-	 * @param originating_ip
-	 *            [Optional] Your end users IP Address. This value must be in
-	 *            the format defined by IETF in the Internet-Draft document
-	 *            titled Textual Representation of IPv4 and IPv6 Addresses.
-	 *            </br>Ex: originating_ip=192.168.123.456. </br>Set it to null
-	 *            if not sending originating ip.
-	 * @param session_id
-	 *            [Optional] Your end users session id. Set it to "null" if not
-	 *            sending session id.
-	 * @param ttsMessage
-	 *            [Optional] Allows you to pass a text-to-speech (TTS) message
-	 *            with language. Language parameter must be used with this.
-	 * @param pushMessage
-	 *            [Optional] Allows you to pass message that you want to Push.
-	 *            Ex String: Hello, your secret code is $$CODE$$. Thank you.
-	 * @param smsMessage
-	 *            [Optional] Allows you to pass a message sent via sms . Ex
-	 *            String: Hello, your secret code is $$CODE$$. Thank you.
-	 * @return A {@link com.telesign.verify.response.VerifyResponse} object,
-	 *         which contains the JSON-formatted response body from the TeleSign
-	 *         server.
+	 * The Smart Verify web service simplifies the process of verifying user
+	 * identity by integrating several TeleSign web services into a single API
+	 * call. This eliminates the need for you to make multiple calls to the
+	 * TeleSign Verify resource. See
+	 * https://developer.telesign.com/docs/rest_api-smart-verify for detailed
+	 * API documentation.
 	 */
-	public TeleSignResponse smartVerify(String phone_number,
+	public TeleSignResponse smart(String phone_number,
 			Map<String, String> smartVerifyParams) {
 		tsResponse = new TeleSignResponse();
 		try {
@@ -380,7 +205,8 @@ public class Verify {
 					V1_VERIFY_SMART, "POST", customer_id, secret_key,
 					verifyParams);
 			smartVerifyParams.put("phone_number", phone_number);
-			StringBuffer body = TeleSignUtils.parsePostParams(smartVerifyParams);
+			StringBuffer body = TeleSignUtils
+					.parsePostParams(smartVerifyParams);
 
 			tr.setPostBody(body.toString());
 
@@ -395,39 +221,12 @@ public class Verify {
 	}
 
 	/**
-	 * @param phone_number
-	 *            [Required] The phone number of the mobile device that you want
-	 *            to send push notifications to. The phone number must include
-	 *            its associated country code (1 for North America). For
-	 *            example, phone_number=13105551212.
-	 * @param notification_type
-	 *            [Optional] Indicates the security measure to use for
-	 *            transaction authorization. Valid values are <i>SIMPLE</i> and
-	 *            <i>CODE</i>. The default value is <i>SIMPLE</i>.
-	 * @param notification_value
-	 *            [Optional] Applies when notification_type=CODE.You normally
-	 *            leave this parameter empty, and accept the default behavior in
-	 *            which TeleSign automatically generates a six-digit value for
-	 *            you, and sends it to you in our response message. If you'd
-	 *            prefer to use your own verification code, you can override the
-	 *            default behavior by setting a numeric value for this
-	 *            parameter. Values must be between six and eight digits long.
-	 *            [Default] is <i>null</i>.
-	 * @param bundle_id
-	 *            [Required] Specifies a custom banner and icon for the TeleSign
-	 *            AuthID application to use for this notification. This allows
-	 *            you to brand your notifications with your corporate logo
-	 *            and/or your service-specific branding. [Examples]
-	 *            template=mobile_2fa, or template=Outlook-2FA
-	 * @param message
-	 *            [Optional] The message to display to the end user, in the body
-	 *            of the notification. If you don't include this parameter, then
-	 *            TeleSign automatically supplies the default message. [Example]
-	 *            message=Enter the code displayed on our web site.[Default] is
-	 *            <i>null</i>.
-	 * @return A {@link com.telesign.verify.response.VerifyResponse} object,
-	 *         which contains the JSON-formatted response body from the TeleSign
-	 *         server.
+	 * The Push Verify web service allows you to provide on-device transaction
+	 * authorization for your end users. It works by delivering authorization
+	 * requests to your end users via push notification, and then by receiving
+	 * their permission responses via their mobile device's wireless Internet
+	 * connection. See https://developer.telesign.com/docs/rest_api-verify-push
+	 * for detailed API documentation.
 	 */
 	public TeleSignResponse push(String phone_number,
 			Map<String, String> pushParams) {

@@ -14,7 +14,7 @@ import com.telesign.util.TeleSignUtils;
  * customers. Participation is voluntary, but you have to contribute in order to
  * benefit.
  */
-public class TeleBureauClient {
+public class TelebureauClient {
 	private String customerId;
 	private String secretKey;	
 	private Map<String, String> telebureauParams;
@@ -23,7 +23,7 @@ public class TeleBureauClient {
 
 	private TeleSignResponse tsResponse;
 
-	public TeleBureauClient(String customerId, String secretKey,
+	public TelebureauClient(String customerId, String secretKey,
 			Map<String, String> params) {
 		this.customerId = customerId;
 		this.secretKey = secretKey;

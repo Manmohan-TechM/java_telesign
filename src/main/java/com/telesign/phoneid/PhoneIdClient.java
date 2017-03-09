@@ -30,7 +30,7 @@ public class PhoneIdClient {
 	/**
 	 * The PhoneID API provides a cleansed phone number, phone type, and telecom
 	 * carrier information to determine the best communication method - SMS or
-	 * voice. See https://developer.telesign.com/docs/phoneid-1 for detailed API
+	 * voice. See https://developer.telesign.com/docs/phoneid-api for detailed API
 	 * documentation.
 	 * 
 	 * @param phone_number
@@ -44,11 +44,12 @@ public class PhoneIdClient {
 			TeleSignRequest tr = new TeleSignRequest(API_BASE_URL,
 					PHONEID_RESOURCE + phone_number, "POST", customer_id,
 					secret_key, params);
+			if(null != phoneidParams){
+				StringBuffer body = TeleSignUtils.parsePostParams(phoneidParams);
 
-			StringBuffer body = TeleSignUtils.parsePostParams(phoneidParams);
-
-			tr.setPostBody(body.toString());
-
+				tr.setPostBody(body.toString());	
+			}
+			
 			tsResponse = tr.executeRequest();
 		} catch (IOException e) {
 

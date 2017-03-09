@@ -8,7 +8,7 @@ import com.telesign.util.TeleSignRequest;
 import com.telesign.util.TeleSignUtils;
 
 /**
- * The TeleSign Data APIs that deliver deep phone number data attributes that help optimize the end user verification process and evaluate risk.
+ * Score provides risk information about a specified phone number.
  */
 public class ScoreClient {
 	private final String customer_id;
@@ -18,6 +18,11 @@ public class ScoreClient {
 	private static final String SCORE_RESOURCE = "/v1/score/";	
 	private static final String API_BASE_URL = "https://rest.telesign.com";
 
+	/**
+	 * @param customer_id
+	 * @param secret_key
+	 * @param params
+	 */
 	public ScoreClient(String customer_id, String secret_key,
 			Map<String, String> params) {
 

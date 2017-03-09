@@ -17,9 +17,12 @@ import com.telesign.util.TeleSignRequest;
 import com.telesign.util.TeleSignUtils;
 
 /**
- * The PhoneId class abstracts your interactions with the
- * <em>TeleSign PhoneID web service</em>. A PhoneId object encapsulates your
- * credentials (your TeleSign <em>Customer ID</em> and <em>Secret Key</em>).
+ * PhoneID is a set of REST APIs that deliver deep phone number data attributes
+ * that help optimize the end user verification process and evaluate risk.
+ * TeleSign PhoneID provides a wide range of risk assessment indicators on the
+ * number to help confirm user identity, delivering real-time decision making
+ * throughout the number lifecycle and ensuring only legitimate users are
+ * creating accounts and accessing your applications.
  */
 public class PhoneId {
 
@@ -39,26 +42,11 @@ public class PhoneId {
 	private TeleSignResponse tsResponse;
 
 	/**
-	 * The PhoneId class constructor. Once you instantiate a PhoneId object, you
-	 * can use it to make instance calls to <em>PhoneID Standard</em>,
-	 * <em>PhoneID Score</em>, <em>PhoneID Contact</em>, and
-	 * <em>PhoneID Live</em>.
+	 * The PhoneId class constructor.
 	 * 
 	 * @param customer_id
-	 *            [Required] A string representing your TeleSign Customer ID.
-	 *            This represents your TeleSign account number.
 	 * @param secret_key
-	 *            [Required] A string representing your TeleSign Secret Key
-	 *            (available from the TeleSign Client Portal).
-	 * @param connectTimeout
-	 *            [Required] A integer representing connection timeout value
-	 *            while connecting to Telesign api.
-	 * @param readTimeout
-	 *            [Required] A integer representing read timeout value while
-	 *            reading response returned from Telesign api.
-	 * @param httpsProtocol
-	 *            [Optional] Specify the protocol version to use. ex: TLSv1.1,
-	 *            TLSv1.2. default is TLSv1.2
+	 * @param params
 	 */
 	public PhoneId(String customer_id, String secret_key,
 			Map<String, String> params) {
@@ -69,34 +57,21 @@ public class PhoneId {
 	}
 
 	/**
-	 * Returns information about a specified phone number�s type, numbering
-	 * structure, cleansing details, and location details.
-	 * 
-	 * @param phone_number
-	 *            [Required] A string representing the phone number you want
-	 *            information about.
-	 * @param originating_ip
-	 *            [Optional] Your end users IP Address. This value must be in
-	 *            the format defined by IETF in the Internet-Draft document
-	 *            titled Textual Representation of IPv4 and IPv6 Addresses. Ex:
-	 *            originating_ip=192.168.123.456. Set it to null if not sending
-	 *            originating ip.
-	 * @param session_id
-	 *            [Optional] Your end users session id. Set it to "null" if not
-	 *            sending session id.
-	 * @return A {@link com.telesign.phoneid.response.PhoneIdStandardResponse}
-	 *         object, which contains the JSON-formatted response body from the
-	 *         TeleSign server.
+	 * The PhoneID Standard API that provides phone type and telecom carrier
+	 * information to identify which phone numbers can receive SMS messages
+	 * and/or a potential fraud risk. See
+	 * https://developer.telesign.com/docs/rest_phoneid-standard for detailed
+	 * API documentation.
 	 */
 	public TeleSignResponse standard(String phone_number,
-			Map<String, String> standardparams) {
+			Map<String, String> standardParams) {
 		tsResponse = new TeleSignResponse();
 		try {
 
 			TeleSignRequest tr = new TeleSignRequest(API_BASE_URL,
 					V1_PHONEID_STANDARD + phone_number, "GET", customer_id,
 					secret_key, phoneIdParams);
-			TeleSignUtils.parseGetParams(tr, standardparams);
+			TeleSignUtils.parseGetParams(tr, standardParams);
 
 			tsResponse = tr.executeRequest();
 		} catch (IOException e) {
@@ -110,29 +85,14 @@ public class PhoneId {
 	}
 
 	/**
-	 * Returns risk information about a specified phone number, including a
-	 * real-time risk score, threat level, and recommendation for action.
-	 * 
-	 * @param phone_number
-	 *            [Required] A string representing the phone number you want
-	 *            information about.
-	 * @param ucid
-	 *            [Required] A string specifying one of the Use Case Codes.
-	 * @param originating_ip
-	 *            [Optional] Your end users IP Address. This value must be in
-	 *            the format defined by IETF in the Internet-Draft document
-	 *            titled Textual Representation of IPv4 and IPv6 Addresses. Ex:
-	 *            originating_ip=192.168.123.456. Set it to null if not sending
-	 *            originating ip.
-	 * @param session_id
-	 *            [Optional] Your end users session id. Set it to "null" if not
-	 *            sending session id.
-	 * @return A {@link com.telesign.phoneid.response.PhoneIdScoreResponse}
-	 *         object, which contains the JSON-formatted response body from the
-	 *         TeleSign server.
+	 * Score is an API that delivers reputation scoring based on phone number
+	 * intelligence, traffic patterns, machine learning, and a global data
+	 * consortium. See
+	 * https://developer.telesign.com/docs/rest_api-phoneid-score for detailed
+	 * API documentation.
 	 */
 	public TeleSignResponse score(String phone_number, String ucid,
-			Map<String, String> scoreParams) {		
+			Map<String, String> scoreParams) {
 		tsResponse = new TeleSignResponse();
 		try {
 
@@ -154,27 +114,11 @@ public class PhoneId {
 	}
 
 	/**
-	 * Returns contact details for a specified phone number�s subscriber. This
-	 * includes the subscriber's First Name, Last Name, Street Address, City,
-	 * State (or Province), Country, and ZIP (Postal) Code.
-	 * 
-	 * @param phone_number
-	 *            [Required] A string representing the phone number you want
-	 *            information about.
-	 * @param ucid
-	 *            [Required] A string specifying one of the Use Case Codes.
-	 * @param originating_ip
-	 *            [Optional] Your end users IP Address. This value must be in
-	 *            the format defined by IETF in the Internet-Draft document
-	 *            titled Textual Representation of IPv4 and IPv6 Addresses. Ex:
-	 *            originating_ip=192.168.123.456. Set it to null if not sending
-	 *            originating ip.
-	 * @param session_id
-	 *            [Optional] Your end users session id. Set it to "null" if not
-	 *            sending session id.
-	 * @return A {@link com.telesign.phoneid.response.PhoneIdContactResponse}
-	 *         object, which contains the JSON-formatted response body from the
-	 *         TeleSign server.
+	 * The PhoneID Contact API delivers contact information related to the
+	 * subscriber's phone number to provide another set of indicators for
+	 * established risk engines. See
+	 * https://developer.telesign.com/docs/rest_api-phoneid-contact for detailed
+	 * API documentation.
 	 */
 	public TeleSignResponse contact(String phone_number, String ucid,
 			Map<String, String> contactParams) {
@@ -201,31 +145,10 @@ public class PhoneId {
 	}
 
 	/**
-	 * Returns information about a specified phone number�s
-	 * <em>state of operation</em>. You can use it to find out if:
-	 * <ul>
-	 * <li>the line is in service,</li>
-	 * <li>the number is reachable,</li>
-	 * <li>the mobile phone is roaming, and if so, in which country.</li>
-	 * </ul>
-	 * 
-	 * @param phone_number
-	 *            [Required] A string representing the phone number you want
-	 *            information about.
-	 * @param ucid
-	 *            [Required] A string specifying one of the Use Case Codes.
-	 * @param originating_ip
-	 *            [Optional] Your end users IP Address. This value must be in
-	 *            the format defined by IETF in the Internet-Draft document
-	 *            titled Textual Representation of IPv4 and IPv6 Addresses. Ex:
-	 *            originating_ip=192.168.123.456. Set it to null if not sending
-	 *            originating ip.
-	 * @param session_id
-	 *            [Optional] Your end users session id. Set it to "null" if not
-	 *            sending session id.
-	 * @return A {@link com.telesign.phoneid.response.PhoneIdContactResponse}
-	 *         object, which contains the JSON-formatted response body from the
-	 *         TeleSign server.
+	 * The PhoneID Live API delivers insights such as whether a phone is active
+	 * or disconnected, a device is reachable or unreachable and its roaming
+	 * status. See https://developer.telesign.com/docs/rest_api-phoneid-live for
+	 * detailed API documentation.
 	 */
 	public TeleSignResponse live(String phone_number, String ucid,
 			Map<String, String> liveParams) {
@@ -251,17 +174,11 @@ public class PhoneId {
 	}
 
 	/**
-	 * The <em>PhoneID Number Deactivation</em> web service provides status
-	 * information for phone numbers that have been deactivated due to various
-	 * reasons. Reasons include, but are not limited to, contract termination,
-	 * SIM card expiration, and so on.
-	 * 
-	 * @param phoneNo
-	 *            [Required] A string representing the phone number you want
-	 *            information about.
-	 * @param ucid
-	 *            [Required]
-	 * @return PhoneIdCallForwardResponse
+	 * The PhoneID Number Deactivation API determines whether a phone number has
+	 * been deactivated and when, based on carriers' phone number data and
+	 * TeleSign's proprietary analysis. See
+	 * https://developer.telesign.com/docs/rest_api-phoneid-number-deactivation
+	 * for detailed API documentation.
 	 */
 	public TeleSignResponse numberDeactivation(String phoneNo, String ucid,
 			Map<String, String> deactivationParams) {

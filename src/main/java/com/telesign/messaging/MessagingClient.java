@@ -1,6 +1,7 @@
 package com.telesign.messaging;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.telesign.response.TeleSignResponse;
@@ -19,7 +20,7 @@ public class MessagingClient {
 	private TeleSignResponse tsResponse;
 	private static final String MESSAGING_RESOURCE = "/v1/messaging";
 	private static final String MESSAGING_STATUS_RESOURCE = "/v1/messaging/";
-	private static final String API_BASE_URL = "https://rest.telesign.com";
+	private static final String API_BASE_URL = "https://rest-api.telesign.com";
 
 	public MessagingClient(String customer_id, String secret_key,
 			Map<String, String> params) {
@@ -46,6 +47,8 @@ public class MessagingClient {
 		try {
 			TeleSignRequest tr = new TeleSignRequest(API_BASE_URL,
 					MESSAGING_RESOURCE, "POST", customer_id, secret_key, params);
+			if(null == messageParams)
+				messageParams = new HashMap<String, String>();
 			messageParams.put("phone_number", phone_number);
 			messageParams.put("message", message);
 			messageParams.put("message_type", message_type);

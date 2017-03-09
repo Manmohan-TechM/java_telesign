@@ -17,7 +17,7 @@ public class AutoVerifyClient {
 	private Map<String, String> params;
 	private TeleSignResponse tsResponse;
 
-	private static final String API_BASE_URL = "https://rest-ww.telesign.com";
+	private static final String API_BASE_URL = "https://rest-api.telesign.com";
 	private static final String AUTOVERIFY_STATUS_RESOURCE = "/v1/mobile/verification/status/";
 
 	public AutoVerifyClient(String customer_id, String secret_key,
