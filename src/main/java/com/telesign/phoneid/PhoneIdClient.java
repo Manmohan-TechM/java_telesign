@@ -16,7 +16,7 @@ public class PhoneIdClient {
 	private final String secret_key;
 	private Map<String, String> params;
 	private TeleSignResponse tsResponse;
-	private static final String API_BASE_URL = "https://rest.telesign.com";
+	private static final String API_BASE_URL = "https://rest-api.telesign.com";
 	private static final String PHONEID_RESOURCE = "/v1/phoneid/";
 
 	public PhoneIdClient(String customer_id, String secret_key,

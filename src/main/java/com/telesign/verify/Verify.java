@@ -99,15 +99,15 @@ public class Verify {
 	 * detailed API documentation.
 	 */
 	public TeleSignResponse voice(String phone_number,
-			Map<String, String> callParams) {
+			Map<String, String> voiceParams) {
 
 		tsResponse = new TeleSignResponse();
 		try {
 			TeleSignRequest tr = new TeleSignRequest(API_BASE_URL,
 					V1_VERIFY_CALL, "POST", customer_id, secret_key,
 					verifyParams);
-			callParams.put("phone_number", phone_number);
-			StringBuffer body = TeleSignUtils.parsePostParams(callParams);
+			voiceParams.put("phone_number", phone_number);
+			StringBuffer body = TeleSignUtils.parsePostParams(voiceParams);
 
 			tr.setPostBody(body.toString());
 

@@ -15,8 +15,8 @@ public class ScoreClient {
 	private final String secret_key;
 	private Map<String, String> params;
 	private TeleSignResponse tsResponse;
-	private static final String SCORE_RESOURCE = "/v1/score/";	
-	private static final String API_BASE_URL = "https://rest.telesign.com";
+	private static final String SCORE_RESOURCE = "/v1/score/";
+	private static final String API_BASE_URL = "https://rest-api.telesign.com";
 
 	/**
 	 * @param customer_id
