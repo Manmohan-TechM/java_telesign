@@ -18,7 +18,7 @@ public class TelebureauClient {
 	private String customerId;
 	private String secretKey;	
 	private Map<String, String> telebureauParams;
-	private static final String API_BASE_URL = "https://rest.telesign.com";
+	private static final String API_BASE_URL = "https://rest-api.telesign.com";
 	private static final String TELEBUREAU_EVENT = "/v1/telebureau/event/";
 
 	private TeleSignResponse tsResponse;
@@ -70,7 +70,7 @@ public class TelebureauClient {
 	/**
 	 * Retrieves the fraud event status. You make this call in your web
 	 * application after completion of create transaction for a telebureau
-	 * event. See https://developer.telesign.com/docs/rest_api-telebureau for
+	 * event. See https://developer.telesign.com/docs/telebureau-api for
 	 * detailed API documentation.
 	 *	
 	 * @param reference_id
