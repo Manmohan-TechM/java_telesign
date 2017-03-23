@@ -120,17 +120,19 @@ public class TeleSignRequest {
 		this.resource = resource;
 		this.customer_id = customer_id;
 		this.secret_key = secret_key;
-		try{
-			if(requestParams.containsKey("connectTimeout"))
-				this.connectTimeout = Integer.parseInt(requestParams.get("connectTimeout"));
-			if(requestParams.containsKey("readTimeout"))
-				this.readTimeout = Integer.parseInt(requestParams.get("readTimeout"));			
-		} catch(NumberFormatException nfe){
-			System.err.println("IOException while executing phoneid live API: "
-					+ nfe.getMessage());			
+		if(null != requestParams){			
+			try{
+				if(requestParams.containsKey("connectTimeout"))
+					this.connectTimeout = Integer.parseInt(requestParams.get("connectTimeout"));
+				if(requestParams.containsKey("readTimeout"))
+					this.readTimeout = Integer.parseInt(requestParams.get("readTimeout"));			
+			} catch(NumberFormatException nfe){
+				System.err.println("IOException while executing phoneid live API: "
+						+ nfe.getMessage());			
+			}
+			if(requestParams.containsKey("httpsProtocol"))
+				this.httpsProtocol = requestParams.get("httpsProtocol");
 		}
-		if(requestParams.containsKey("httpsProtocol"))
-			this.httpsProtocol = requestParams.get("httpsProtocol");
 
 		post = (method.toLowerCase().equals("post"));
 		delete = (method.equalsIgnoreCase("delete"));
