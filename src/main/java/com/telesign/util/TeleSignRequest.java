@@ -15,6 +15,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.security.KeyManagementException;
@@ -89,6 +92,13 @@ public class TeleSignRequest {
     private int readTimeout = 30000;
     
     private String httpsProtocol = "TLSv1.2";
+    
+    private String httpProxyIPAddress;
+	private int httpProxyPort;
+	private boolean proxyFlag = false;
+	private String httpProxyUsername;
+	private String httpProxyPassword;
+	private boolean proxyAuthenticationEnabled = false;
 
 
 	/**
@@ -120,18 +130,8 @@ public class TeleSignRequest {
 		this.resource = resource;
 		this.customer_id = customer_id;
 		this.secret_key = secret_key;
-		if(null != requestParams){			
-			try{
-				if(requestParams.containsKey("connectTimeout"))
-					this.connectTimeout = Integer.parseInt(requestParams.get("connectTimeout"));
-				if(requestParams.containsKey("readTimeout"))
-					this.readTimeout = Integer.parseInt(requestParams.get("readTimeout"));			
-			} catch(NumberFormatException nfe){
-				System.err.println("IOException while executing phoneid live API: "
-						+ nfe.getMessage());			
-			}
-			if(requestParams.containsKey("httpsProtocol"))
-				this.httpsProtocol = requestParams.get("httpsProtocol");
+		if(null != requestParams){		
+			setRequestParams(requestParams);			
 		}
 
 		post = (method.toLowerCase().equals("post"));
@@ -140,6 +140,38 @@ public class TeleSignRequest {
 		ts_headers = new TreeMap<String, String>();
 		headers = new TreeMap<String, String>();
 		params = new HashMap<String, String>();
+	}
+
+	/**
+	 * Used for setting TeleSignRequest connection Parameters
+	 * @param requestParams
+	 */
+	private void setRequestParams(Map<String, String> requestParams) {
+		try{
+			if(requestParams.containsKey("connectTimeout"))
+				this.connectTimeout = Integer.parseInt(requestParams.get("connectTimeout"));
+			if(requestParams.containsKey("readTimeout"))
+				this.readTimeout = Integer.parseInt(requestParams.get("readTimeout"));
+			if(requestParams.containsKey("httpsProtocol"))
+				this.httpsProtocol = requestParams.get("httpsProtocol");
+			if(requestParams.containsKey("httpProxyIPAddress") && requestParams.containsKey("httpProxyPort")){
+				this.httpProxyIPAddress = requestParams.get("httpProxyIPAddress");
+				this.httpProxyPort = Integer.parseInt(requestParams.get("httpProxyPort"));
+				this.proxyFlag = true;
+				} else 
+					this.proxyFlag = false;
+						
+			if(requestParams.containsKey("httpProxyUsername") && requestParams.containsKey("httpProxyPassword")){
+				this.httpProxyUsername = requestParams.get("httpProxyUsername");
+				this.httpProxyPassword = requestParams.get("httpProxyPassword");
+				this.proxyAuthenticationEnabled = true;
+			} else 
+				this.proxyAuthenticationEnabled = false;	
+			
+		} catch(NumberFormatException nfe){
+			System.err.println("IOException while executing phoneid live API: "
+					+ nfe.getMessage());			
+		}
 	}
 
 	/**
@@ -298,7 +330,16 @@ public class TeleSignRequest {
 
 		String auth_header = "TSA " + customer_id + ":" + signature;
 
-		connection = (HttpURLConnection) url.openConnection();
+		if(proxyFlag){
+			Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(InetAddress.getByName(httpProxyIPAddress), httpProxyPort));
+			connection = (HttpURLConnection) url.openConnection(proxy);			
+			if(proxyAuthenticationEnabled){
+				String encoded = new String(Base64.encodeBase64((httpProxyUsername + ":" + httpProxyPassword).getBytes()));
+				connection.addRequestProperty("Proxy-Authorization", "Basic " + encoded);
+			}
+		} else{
+			connection = (HttpURLConnection) url.openConnection();
+			}
 		connection.setConnectTimeout(connectTimeout);
 		connection.setReadTimeout(readTimeout);
 		connection.setRequestProperty("Authorization", auth_header);
