@@ -20,7 +20,7 @@ public class VoiceClient {
 	private TeleSignResponse tsResponse;
 	private static final String VOICE_RESOURCE = "/v1/voice";
 	private static final String VOICE_STATUS_RESOURCE = "/v1/voice/";
-	private static final String API_BASE_URL = "https://rest.telesign.com";
+	private static final String API_BASE_URL = "https://rest-ww.telesign.com";
 
 	public VoiceClient(String customer_id, String secret_key,
 			Map<String, String> params) {
