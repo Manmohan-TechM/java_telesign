@@ -170,7 +170,7 @@ public class TeleSignRequest {
 			
 		} catch(NumberFormatException nfe){
 			System.err.println("IOException while executing phoneid live API: "
-					+ nfe.getMessage());			
+					+ nfe.getMessage());
 		}
 	}
 
@@ -383,7 +383,7 @@ public class TeleSignRequest {
 
 		try {
 
-			InputStream isr = (response == 200) ? connection.getInputStream() : connection.getErrorStream();
+			InputStream isr = ((response == 200) || (response == 201 )) ? connection.getInputStream() : connection.getErrorStream();
 			in = new BufferedReader(new InputStreamReader(isr));
 			String urlReturn;
 
