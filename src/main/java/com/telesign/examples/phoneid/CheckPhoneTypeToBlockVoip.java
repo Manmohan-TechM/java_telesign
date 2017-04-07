@@ -28,7 +28,7 @@ public class CheckPhoneTypeToBlockVoip {
 		PhoneIdClient phoneIdClient = new PhoneIdClient(customer_id, secret_key, params);
 		
 		HashMap<String, String> phoneidParams = new HashMap<String, String>();
-		phoneidParams.put("account_lifecycle_event", "create");
+		
 		// Fetch Response from rest.telesign.com 
 		TeleSignResponse response = phoneIdClient.phoneid(phone_number, phoneidParams);
 		if(response.getStatusLine().equalsIgnoreCase("ok")){
