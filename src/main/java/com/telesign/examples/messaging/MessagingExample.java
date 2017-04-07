@@ -3,13 +3,10 @@ package com.telesign.examples.messaging;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.telesign.messaging.MessagingClient;
 import com.telesign.response.TeleSignResponse;
-import com.telesign.verify.Verify;
 
 public class MessagingExample {
 
@@ -28,7 +25,12 @@ public class MessagingExample {
 		HashMap<String, String> params = new HashMap<String, String>();
 		params.put("readTimeout", "30000");
 		params.put("connectTimeout", "30000");
-		params.put("httpsProtocol", "TLSv1.1");
+		//params.put("httpsProtocol", "TLSv1.1");
+		
+		params.put("httpProxyIPAddress", "inpout-http-Proxy-IPAddress");
+		params.put("httpProxyPort", "input-Proxy-Port");
+		params.put("httpProxyUsername", "input-Proxy-Username");
+		params.put("httpProxyPassword", "input-Proxy-Password");
 
 		MessagingClient messagingClient = new MessagingClient(customer_id, secret_key, params);
 		// Fetch Response from rest.telesign.com 
